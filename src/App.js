@@ -39,19 +39,20 @@ const App = ({drinks}) => {
         </thead>
         <tbody>
           {Object.keys(items).map((itemKey) => {
+            const {id, name, temperature, minimumTemperature, maximumTemperature} = items[itemKey]
             return (
-              <tr key={items[itemKey].id}>
-                <td width={150}>{items[itemKey].name}</td>
-                <td width={150}>{items[itemKey].temperature}</td>
+              <tr key={id}>
+                <td width={150}>{name}</td>
+                <td width={150}>{temperature}</td>
                 <td width={150}>
-                  {items[itemKey].temperature <
-                    items[itemKey].minimumTemperature && <span>too low</span>}
-                  {items[itemKey].temperature >
-                    items[itemKey].maximumTemperature && <span>too high</span>}
-                  {items[itemKey].temperature <=
-                    items[itemKey].maximumTemperature &&
-                    items[itemKey].temperature >=
-                    items[itemKey].minimumTemperature && <span>all good</span>}
+                  {temperature <
+                    minimumTemperature && <span>too low</span>}
+                  {temperature >
+                    maximumTemperature && <span>too high</span>}
+                  {temperature <=
+                    maximumTemperature &&
+                    temperature >=
+                    minimumTemperature && <span>all good</span>}
                 </td>
               </tr>
             );
