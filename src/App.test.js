@@ -5,7 +5,7 @@ import axios from 'axios'
 
 jest.mock('axios')
 
-const returnedValue = chance.natural()
+const temperature = chance.natural({min: 7})
 const drinks = [{
         id: '1',
         name: 'Pilsner',
@@ -18,7 +18,7 @@ describe('App', () => {
 
     beforeEach(() => {
         jest.resetAllMocks();
-        axios.mockResolvedValue({data: {id: '1', temperature: returnedValue}})
+        axios.mockResolvedValue({data: {id: '1', temperature}})
         const {container, rerender} = render(<App drinks={drinks}/>)
         appContainer = container
         appRerender = rerender
@@ -61,9 +61,11 @@ describe('App', () => {
             expect(screen.getAllByRole('row')).toHaveLength(drinks.length + headerRowAmount)
         })
 
-        // it('has the correct data for the row', () => {
-
-        // })
+        it('has the correct data for the row', async () => {
+            screen.getByRole('cell', {name: drinks[0].name}) 
+            await screen.findByRole('cell', {name: temperature}) 
+            await screen.findByRole('cell', {name: 'too high'})
+        })
     })
    
 });
