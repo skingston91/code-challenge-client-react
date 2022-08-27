@@ -1,67 +1,30 @@
 import { useEffect, useState } from 'react';
+import axios from 'axios'
 
-const data = [
-  {
-    id: '1',
-    name: 'Pilsner',
-    minimumTemperature: 4,
-    maximumTemperature: 6,
-  },
-  {
-    id: '2',
-    name: 'IPA',
-    minimumTemperature: 5,
-    maximumTemperature: 6,
-  },
-  {
-    id: '3',
-    name: 'Lager',
-    minimumTemperature: 4,
-    maximumTemperature: 7,
-  },
-  {
-    id: '4',
-    name: 'Stout',
-    minimumTemperature: 6,
-    maximumTemperature: 8,
-  },
-  {
-    id: '5',
-    name: 'Wheat beer',
-    minimumTemperature: 3,
-    maximumTemperature: 5,
-  },
-  {
-    id: '6',
-    name: 'Pale Ale',
-    minimumTemperature: 4,
-    maximumTemperature: 6,
-  },
-];
+export const serverUrl = 'http://localhost:8081' // this should be an env variable
 
-function App() {
+const App = ({drinks}) => {
   const [items, setItems] = useState({});
 
   useEffect(() => {
     const request = () =>
-      data.forEach((product) => {
-        fetch(`http://localhost:8081/temperature/${product.id}`)
-          .then((response) => response.json())
-          .then((response) =>
+      drinks.forEach((product) => {
+        axios(`${serverUrl}/temperature/${product.id}`)
+          .then(({data}) => 
             setItems((prevItems) => ({
-              ...prevItems,
-              [product.id]: {
-                ...product,
-                ...response,
-              },
-            }))
+            ...prevItems,
+            [data.id]: {
+              ...product,
+              ...data,
+            },
+          }))
           );
       });
 
-    setInterval(request, 5000);
+    setInterval(request, 5000); // To Test
 
     request();
-  }, []);
+  }, [drinks]);
 
   return (
     <div className="App">
@@ -75,22 +38,25 @@ function App() {
           </tr>
         </thead>
         <tbody>
-          {Object.keys(items).map((itemKey) => (
-            <tr key={items[itemKey].id}>
-              <td width={150}>{items[itemKey].name}</td>
-              <td width={150}>{items[itemKey].temperature}</td>
-              <td width={150}>
-                {items[itemKey].temperature <
-                  items[itemKey].minimumTemperature && <span>too low</span>}
-                {items[itemKey].temperature >
-                  items[itemKey].maximumTemperature && <span>too high</span>}
-                {items[itemKey].temperature <=
-                  items[itemKey].maximumTemperature &&
-                  items[itemKey].temperature >=
-                    items[itemKey].minimumTemperature && <span>all good</span>}
-              </td>
-            </tr>
-          ))}
+          {Object.keys(items).map((itemKey) => {
+            const {id, name, temperature, minimumTemperature, maximumTemperature} = items[itemKey]
+            return (
+              <tr key={id}>
+                <td width={150}>{name}</td>
+                <td width={150}>{temperature}</td>
+                <td width={150}>
+                  {temperature <
+                    minimumTemperature && <span>too low</span>}
+                  {temperature >
+                    maximumTemperature && <span>too high</span>}
+                  {temperature <=
+                    maximumTemperature &&
+                    temperature >=
+                    minimumTemperature && <span>all good</span>}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

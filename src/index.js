@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import drinks from './drinks';
 
+// TO test
 ReactDOM.render(
   <React.StrictMode>
     <header>
       <h1>SensorTech</h1>
     </header>
-    <App />
+    <App drinks={drinks}/>
   </React.StrictMode>,
   document.getElementById('root')
 );
