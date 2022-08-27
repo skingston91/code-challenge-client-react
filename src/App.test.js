@@ -66,6 +66,32 @@ describe('App', () => {
             await screen.findByRole('cell', {name: temperature}) 
             await screen.findByRole('cell', {name: 'too high'})
         })
+
+        it('has the correct data when too cold', async () => {
+            axios.mockResolvedValue({data: {id: '1', temperature: 0}})
+            appRerender(<App drinks={[{
+                    id: '1',
+                    name: 'IPA',
+                    minimumTemperature: 5,
+                    maximumTemperature: 6,
+                }
+            ]}/>)
+
+            await screen.findByRole('cell', {name: 'too low'})
+        })
+
+        it('has the correct data when just right', async () => {
+            axios.mockResolvedValue({data: {id: '1', temperature: 5}})
+            appRerender(<App drinks={[{
+                    id: '1',
+                    name: 'IPA',
+                    minimumTemperature: 5,
+                    maximumTemperature: 6,
+                }
+            ]}/>)
+
+            await screen.findByRole('cell', {name: 'all good'})
+        })
     })
    
 });
