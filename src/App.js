@@ -1,30 +1,30 @@
 import { useEffect, useState } from 'react';
-import drinks from './drinks';
+import axios from 'axios'
 
-const serverUrl = 'http://localhost:8081'
-const App = () => {
+export const serverUrl = 'http://localhost:8081' // this should be an env variable
+
+const App = ({drinks}) => {
   const [items, setItems] = useState({});
 
   useEffect(() => {
     const request = () =>
       drinks.forEach((product) => {
-        fetch(`${serverUrl}/temperature/${product.id}`)
-          .then((response) => response.json())
-          .then((response) =>
+        axios(`${serverUrl}/temperature/${product.id}`)
+          .then(({data}) => 
             setItems((prevItems) => ({
-              ...prevItems,
-              [product.id]: {
-                ...product,
-                ...response,
-              },
-            }))
+            ...prevItems,
+            [data.id]: {
+              ...product,
+              ...data,
+            },
+          }))
           );
       });
 
-    setInterval(request, 5000);
+    setInterval(request, 5000); // To Test
 
     request();
-  }, []);
+  }, [drinks]);
 
   return (
     <div className="App">
@@ -38,22 +38,24 @@ const App = () => {
           </tr>
         </thead>
         <tbody>
-          {Object.keys(items).map((itemKey) => (
-            <tr key={items[itemKey].id}>
-              <td width={150}>{items[itemKey].name}</td>
-              <td width={150}>{items[itemKey].temperature}</td>
-              <td width={150}>
-                {items[itemKey].temperature <
-                  items[itemKey].minimumTemperature && <span>too low</span>}
-                {items[itemKey].temperature >
-                  items[itemKey].maximumTemperature && <span>too high</span>}
-                {items[itemKey].temperature <=
-                  items[itemKey].maximumTemperature &&
-                  items[itemKey].temperature >=
+          {Object.keys(items).map((itemKey) => {
+            return (
+              <tr key={items[itemKey].id}>
+                <td width={150}>{items[itemKey].name}</td>
+                <td width={150}>{items[itemKey].temperature}</td>
+                <td width={150}>
+                  {items[itemKey].temperature <
+                    items[itemKey].minimumTemperature && <span>too low</span>}
+                  {items[itemKey].temperature >
+                    items[itemKey].maximumTemperature && <span>too high</span>}
+                  {items[itemKey].temperature <=
+                    items[itemKey].maximumTemperature &&
+                    items[itemKey].temperature >=
                     items[itemKey].minimumTemperature && <span>all good</span>}
-              </td>
-            </tr>
-          ))}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
