@@ -5,6 +5,9 @@ import axios from 'axios'
 
 jest.mock('axios')
 
+
+const getAllTableRows = () => screen.getAllByRole('row')
+
 const temperature = chance.natural({min: 7})
 const drinks = [{
         id: '1',
@@ -12,6 +15,7 @@ const drinks = [{
         maximumTemperature: 6,
     }] // TODO Make this randomly generated and of any length with chance random
 
+const getColumnHeaderByName = (name) => screen.getByRole('columnheader', { name });
 describe('App', () => {
     let appContainer;
     let appRerender;
@@ -29,9 +33,9 @@ describe('App', () => {
     
     it('common elements', () => {
         screen.getByRole('heading',{level: 2, name: 'Beers'})
-        screen.getByRole('columnheader', {name: 'Product'}) 
-        screen.getByRole('columnheader', {name: 'Temperature'}) 
-        screen.getByRole('columnheader', {name: 'Status'}) 
+        getColumnHeaderByName('Product');
+        getColumnHeaderByName('Temperature')
+        getColumnHeaderByName('Status')
     });
 
     describe('api calls', () => {
@@ -42,12 +46,13 @@ describe('App', () => {
         it('api call is made on load with correct url', () => {
             expect(axios).toBeCalledWith(`${serverUrl}/temperature/${drinks[0].id}`)
         });
+        // TODO test its called for each drink
     })
 
     describe('table body', () => {
         it('renders the correct amount of rows per drinks', () => {
             const headerRowAmount = 1
-            expect(screen.getAllByRole('row')).toHaveLength(drinks.length + headerRowAmount)
+            expect(getAllTableRows()).toHaveLength(drinks.length + headerRowAmount)
             const newAmountOfDrinks = [
                 ...drinks,
                  {
@@ -58,7 +63,7 @@ describe('App', () => {
                 },
             ]
             appRerender(<App drinks={newAmountOfDrinks}/>)
-            expect(screen.getAllByRole('row')).toHaveLength(drinks.length + headerRowAmount)
+            expect(getAllTableRows()).toHaveLength(drinks.length + headerRowAmount)
         })
 
         it('has the correct data for the row', async () => {
@@ -95,3 +100,4 @@ describe('App', () => {
     })
    
 });
+

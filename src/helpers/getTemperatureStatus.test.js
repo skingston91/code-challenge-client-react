@@ -1,7 +1,7 @@
 import getTemperatureStatus from './getTemperatureStatus'
 describe('getTemperatureStatus', () => {
     it('returns whe low when too cold', () => {
-        expect(getTemperatureStatus({})).toBe('low')
+        expect(getTemperatureStatus({temperature: 0, minimumTemperature: 1})).toBe('low')
     })
 
     it('returns when hot when too hot', () => {
