@@ -23,7 +23,7 @@
 
 - Move server address .env file
 
-- Add Typescript
+- Move to Typescript (if agreed with the client and other developers) 
 
 - Add tests for api failures
 
@@ -31,18 +31,18 @@
 
 - Add backend tests, I started to write tests in the backend but I decided that the larger change I wanted to make wouldn't be possible in time and perhaps out of scope so I wouldn't need to touch the backend without it. But I feel lots of the complexity of the tests come from the parallel async calls in App. But if the client approved you could do all of them at once and pass an array of ids to back end and make it a single call which would remove lots of the front end complexity both in the tests and the logic and reduce load on the backend, but changes functionality of the app slightly.
 
--- Switched Fetch to Axios but it has an act error which really needs to be fixed
--- Remove my todo's and comments + unused code but there to show what I was planning
+- Switched Fetch to Axios but it has an act error which really needs to be fixed
+- Remove my todo's and comments + unused code but there to show what I was planning
 
--- Missing testing for the Apis being triggered for more than one drink and mock api call always returns the same temp right now in the tests and isn't random
+- Missing testing for the Apis being triggered for more than one drink and mock api call always returns the same temp right now in the tests and isn't random
 
--- Create a helper for generating random drinks data
+- Create a helper for generating random drinks data
 
--- I created the start of a hook useGetTemperature for accessing single but didn't have enough time to handle many calls and then to move away from the rather messy api existing call, which immeditaly changes state on each response and is tightly tying the api calls and results to the code.
+- I created the start of a hook useGetTemperature for accessing single but didn't have enough time to handle many calls and then to move away from the rather messy api existing call, which immeditaly changes state on each response and is tightly tying the api calls and results to the code.
 
--- Add some depedency inversion to the external utils (axios/fetch + react testing library)
+- Add some depedency inversion to the external utils (axios/fetch + react testing library)
 
--- The data shape would be simplier if we had an array of 'values' rather than an object. We don't need to keep matching the id to the object in the table body, but perhaps thats question to learn what is planned in future for the application to decide on the data structures.
+- The data shape would be simplier if we had an array of 'values' rather than an object. We don't need to keep matching the id to the object in the table body, but perhaps thats question to learn what is planned in future for the application to decide on the data structures.
 
 - Fix prettier as wasn't working for me
 
